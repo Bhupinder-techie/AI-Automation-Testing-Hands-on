@@ -1,0 +1,32 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+
+# Step 1: Launch Chrome browser
+driver = webdriver.Chrome()
+driver.maximize_window()
+
+# Step 2: Open YouTube
+driver.get("https://www.youtube.com")
+
+# Step 3: Find the search box
+search_box = driver.find_element(By.NAME, "search_query")
+
+# Step 4: Enter a keyword and hit Enter
+search_box.send_keys("AI Automation Testing with Python")
+search_box.send_keys(Keys.RETURN)
+
+# Step 5: Wait for results to load
+time.sleep(3)
+
+# Step 6: Click the first video result
+first_video = driver.find_element(By.XPATH, '(//a[@id="video-title"])[1]')
+print("Now playing:", first_video.text)
+first_video.click()
+
+# Step 7: Let the video play for 10 seconds
+time.sleep(10)
+
+# Step 8: Close the browser
+driver.quit()
