@@ -1,0 +1,37 @@
+from selenium import webdriver
+from selenium.webdriver import Keys
+from selenium.webdriver.common.by import By
+import time
+
+driver = webdriver.Chrome()
+driver.get("https://www.facebook.com")
+driver.maximize_window()
+driver.implicitly_wait(5)
+
+username = 'singh@mail.com'
+password = 'game@123456'
+
+search_box = driver.find_element(By.ID, "email")
+search_box.send_keys(username)
+
+password_field = driver.find_element(By.ID, "pass")
+password_field.send_keys(password)
+password_field.send_keys(Keys.RETURN)
+time.sleep(5)
+
+try:
+    error_div = wait.until(EC.presence_of_element_located((By.XPATH, "//div[contains(text(), 'The email or mobile number')]")))
+    print("Login failed as expected. Error message:", error_div.text)
+except:
+    print("Error message not found. Test might have failed or changed layout.")
+
+current_url = driver.current_url
+if "login" in current_url or "facebook.com" in current_url:
+    print("Still on login page. Test passed.")
+else:
+    print("Unexpected redirect. Test failed.")
+
+
+print(driver.current_url)
+driver.quit()
+
