@@ -1,0 +1,38 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+
+def login_test(username, password):
+    # Open browser
+    driver = webdriver.Chrome()
+    driver.maximize_window()
+
+    try:
+        # Open URL
+        driver.get("https://practicetestautomation.com/practice-test-login/")
+        time.sleep(2)
+
+        # Fill in username & password
+        username_field = driver.find_element(By.ID, "username")
+        password_field = driver.find_element(By.ID, "password")
+        username_field.send_keys(username)
+        password_field.send_keys(password)
+
+        # Submit form
+        password_field.send_keys(Keys.RETURN)
+        time.sleep(5)
+
+        # Check login result
+        current_url = driver.current_url
+        if 'https://practicetestautomation.com/logged-in-successfully/' in current_url:
+            print("Login successful")
+        else:
+            print("Login failed")
+
+    finally:
+        # Always close browser
+        driver.quit()
+
+# Run the test with valid credentials
+login_test("student", "Password123")
