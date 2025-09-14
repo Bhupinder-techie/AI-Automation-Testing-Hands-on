@@ -1,0 +1,52 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+
+# Set up WebDriver
+driver = webdriver.Chrome()
+driver.maximize_window()
+driver.get("https://www.google.com")
+driver.implicitly_wait(5)
+
+############ Working Locators Demonstration ############
+
+# 1. By Name
+search_box = driver.find_element(By.NAME, 'q')
+search_box.send_keys("Selenium with python")
+search_box.clear()
+
+# 2. By CSS Selector
+search_box = driver.find_element(By.CSS_SELECTOR, 'input[name="q"]')
+search_box.send_keys("Selenium with python")
+search_box.clear()
+
+# 3. By XPath
+search_box = driver.find_element(By.XPATH, '//input[@name="q"]')
+search_box.send_keys("Selenium with python")
+search_box.clear()
+
+# 4. By Tag Name (multiple <input> exist, so this is risky without filtering)
+search_box = driver.find_element(By.TAG_NAME, 'input')
+search_box.send_keys("Selenium with python")
+search_box.clear()
+
+# 5. By Class name
+search_box = driver.find_element(By.CSS_SELECTOR, 'input.gLFyf')  # Safe class
+search_box.send_keys("Selenium with python")
+
+# Submit the search with Enter key
+search_box.send_keys(Keys.RETURN)
+
+# Optional: Wait until results load
+WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.ID, "search"))
+)
+
+# Let results be visible for a few seconds
+time.sleep(3)
+
+# Close browser
+driver.quit()
