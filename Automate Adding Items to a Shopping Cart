@@ -1,0 +1,72 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+import time
+
+def setup_driver():
+    options = Options()
+    options.headless = False
+    options.add_argument('--start-maximized')
+    service = Service()
+    driver = webdriver.Chrome(service=service, options=options)
+    driver.maximize_window()
+    return driver
+
+def go_to_site(driver):
+    driver.get("https://automationexercise.com/")
+    time.sleep(2)
+
+def search_product(driver, search_term):
+    try:
+        search_box = driver.find_element(By.ID, "search_product")
+        search_box.send_keys(search_term)
+        driver.find_element(By.ID, "submit_search").click()
+        time.sleep(2)
+    except Exception as e:
+        print("Search failed:", e)
+
+def select_product(driver):
+    try:
+        product = driver.find_element(By.CSS_SELECTOR, "a[href*='/product_details/']")
+        product.click()
+        time.sleep(2)
+    except Exception as e:
+        print("Error selecting product:", e)
+
+def add_to_cart(driver):
+    try:
+        add_button = driver.find_element(By.CLASS_NAME, "cart")
+        add_button.click()
+        time.sleep(2)
+
+        # Handle modal (Continue Shopping)
+        continue_btn = driver.find_element(By.CLASS_NAME, "close-modal")
+        continue_btn.click()
+        time.sleep(2)
+    except Exception as e:
+        print("Error adding to cart:", e)
+
+def verify_cart(driver):
+    try:
+        driver.find_element(By.PARTIAL_LINK_TEXT, "Cart").click()
+        time.sleep(2)
+        items = driver.find_elements(By.XPATH, "//tr[contains(@id, 'product')]")
+        print(f"Items in cart: {len(items)}")
+    except Exception as e:
+        print("Error verifying cart:", e)
+
+def main():
+    driver = setup_driver()
+    try:
+        go_to_site(driver)
+        search_product(driver, "Tshirt")  # Valid search term on the site
+        select_product(driver)
+        add_to_cart(driver)
+        verify_cart(driver)
+    finally:
+        driver.quit()
+
+if __name__ == "__main__":
+    main()
